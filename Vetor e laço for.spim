@@ -1,0 +1,19 @@
+#Considere duas variáveis f e i associadas aos registradores $s0 e $s1, respectivamente. Considere ainda um vetor A cujo endereço base está nos registradores $s6. Traduza o trecho de código em linguagem C a seguir para assembly MIPS.
+#
+#for ( i = 0; i < 10; i++ ) {
+#   A[i] = f + i;
+#}
+
+li $s0, 0
+FOR:    
+    slti $t0, $s0, 10               #compara se i<10
+    beq $t0, $zero, FIM             #Se $t0 igual a 0 pula para o rótulo Fim
+    
+    mul $t5, $s1, 4                 #Faz a multiplicação do contador $t0 por 4 (um byte), e armazena em $t5
+    add $t5, $t5, $s6               #Soma a quantidade de bytes com o endereço base do vetor, para obter o endereço do elemento $t0 do vetor
+    add $t4, $s0, $s1               #f + i e armazena em $t4
+    sw $t4, 0($t5)                  #Armazena $t4 em A[i] 
+    
+    addi $s0, $s0, 1                #incremento
+    j FOR                           #Próxima Iteração
+FIM:                                #Rótulo FIM 

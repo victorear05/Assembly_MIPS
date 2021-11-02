@@ -1,0 +1,29 @@
+#Lendo e imprimindo String
+
+.data
+    str: .asciiz "Digite uma string\n"      #atribuicao de valor para a variavel str
+    str1: .asciiz "A String digitada é:"    #atribuicao de valor para a variavel str1
+.text                                      
+
+main:                                       #rotulo de inicio do programa
+
+    li $v0, 4                               #chamada de sistema para imprimir uma string 
+    la $a0, str                             #carrega str em $a0 
+    syscall                                 #chamada para o SO                             
+
+    li $v0, 8                               #chamada de sistema para que leia uma string    
+    syscall                                 #chamada para o SO
+
+    move $t0, $a0                           #move o conteúdo de $a0 para $t0 
+
+    li $v0, 4                               #chamada de sistema para imprimir uma string
+    la $a0, str1                            #carrega para $a0 a String str1
+    syscall                                 #chamada para o SO
+
+    move $a0, $t0                           #move o conteudo de $t0 para $a0
+
+    li $v0, 4                               #chamada do sistema para imprimir uma string
+    syscall                                 #chamada para o SO
+
+    li $v0, 10                              #chamada de saida do programa
+    syscall                                 #chamada para o SO

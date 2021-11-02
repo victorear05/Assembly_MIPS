@@ -1,0 +1,58 @@
+#Problema: Teleférico
+
+#A turma do colégio vai fazer uma excursão na serra e todos os alunos e monitores vão tomar um teleférico para
+#subir até o pico de uma montanha. A cabine do teleférico pode levar C pessoas no máximo, contando alunos e monitores, 
+#durante uma viagem até o pico. Por questão de segurança,tem que ter pelo menos um monitor dentro da cabine junto com 
+#os alunos. Por exemplo, se cabem 10 pessoas na cabine e a turma tem 20 alunos, o colégio poderia fazer três viagens: 
+#a primeira com 8 alunos e 1 monitor; a segunda com 6 alunos e 1 monitor; e a terceira com 6 alunos e 1 monitor. Você 
+#consegue ver que não seria possível fazer apenas duas viagens? Dados como entrada a capacidade C e um n´umero total de 
+#A de alunos, calcule e exiba o n´umero mínimo de viagens do teleférico.
+
+#Entrada
+#A primeira linha da entrada contém um inteiro C representando a capacidade da cabine. A segunda linha da entrada contém 
+#um inteiro A representando o número total de alunos na turma.
+#Considere as seguintes restrições para os valores de entrada:
+#• 2 ≤ C ≤ 100
+#• 1 ≤ A < 1000
+
+#Saída
+#Seu programa deve imprimir uma linha contendo um número inteiro, representando o número mínimo de viagens do teleférico 
+#para levar todos os alunos até o pico da montanha.
+
+.data                                   #atribuicao de valor para as variaveis                                   
+    pulaLinha: .asciiz "\n"
+.text                                   #instrucoes do programa
+
+main:                                   #inicio para a execucao do programa
+
+    li $t0, 1                           #atribuindo o valor 1 no registrador $t0
+    
+    li $v0, 5                           #chamada de sistema para que leia um inteiro    
+    syscall                             #chamada para o SO
+
+    sub $t1, $v0, 1                     #armazena o valor de $v0-1 no registrador $t1
+    
+    li $v0, 5                           #chamada de sistema para que imprima um inteiro    
+    syscall                             #chamada para o SO
+
+    move $t2, $v0                       #transfere o valor de $v0 para $t2 
+
+    While:                              #rotulo inicio loop
+        slt $t4, $t1, $t2               #compara se $t1 é menor que $t2 e registra o ressultado em $t4
+        beq $t4, $zero, Saida           #se $t1 menor que $t2 pula para o rotulo Saida
+        sub $t2, $t2, $t1               #subtrai o valor do registrador $t2 pelo de $t1 no $t2
+        addi $t0, 1                     #soma 1 ao registrador do $t0   
+        j While                         #recomecar loop
+    Saida:                              #rotulo do fim loop
+    
+    move $a0, $t0                       #move o conteudo de $t0 para $a0
+
+    li $v0, 1                           #chamada de sistema para que imprima um inteiro
+    syscall                             #chamada para o SO
+
+    li $v0, 4                           #chamada de sistema para que imprima uma string
+    la $a0, pulaLinha                   #carrega a string pulaLinha paro o registrador $a0
+    syscall                             #chamada para o SO
+
+    li $v0, 10                          #chamada de saida do programa
+    syscall                             #chamada para o SO

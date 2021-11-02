@@ -1,0 +1,47 @@
+#Números distintos
+
+#Sua tarefa é criar um procedimento chamado elemDistintos que recebe dois argumentos:
+#• no registrador $a0, o endereço base de um vetor ordenado de inteiros v e
+#• no registrador $a1, a quantidade de elementos de v.
+#Seu procedimento deve retornar, em $v0, a quantidade de elementos distintos presentes no vetor v.
+
+#Entrada
+#Não há dados de entrada para serem lidos.
+
+#Saída
+#Não há dados de saída para serem impressos.
+
+elemDistintos:                      #rótulo do procedimento
+    
+    addi $sp, $sp, -4               #Faz a soma do valor de $sp com o inteiro -4, e armazena em sp
+    sw $s0, 0($sp)                  #aumenta o ponteiro da pilha em 4 bytes
+
+    move $t3, $a0                   #move o valor de $a0 para $t3
+    move $t2, $a1                   #move o valor de $t2 para $a1
+
+    addi $t2, $t2, -1               #decrementa 1 no registrador $t2
+
+    li $t0, 0                       #o registrador $t0 recebe o valor 0
+    li $s0, 1                       #o registrador $s0 recebe o valor 1
+
+    FOR:                            #rótulo for    
+        mul $t5, $t0, 4             #Faz a multiplicação do contador $t0 por 4 (um byte), e armazena em $t5
+        add $t5, $t5, $t3           #Soma a quantidade de bytes com o endereço base do vetor, para obter o endereço do elemento $t0 do vetor
+        addi $t6, $t5, 4            #$t6 recebe o endereço do próximo elemento do vetor
+        lw $t1, 0($t5)              #Carrega em $t1 o elemento localizado no campo de memória $t5 + 0 bytes
+        lw $t6, 0($t6)              #Carrega em $t6 o elemento localizado no campo de memória $t6 + 0 bytes
+        beq $t1, $t6, igual         #Se $t1 igual a $t6 pula para o rótulo igual
+        addi $s0, $s0, 1            #Se não: Faz a soma do registrador $s0 com 1 e armazena em $s0
+        igual:                      #Rótulo igual
+        slt $t4, $t0, $t2           #Se chegou a comparar os 2 últimos elementos do vetor
+        beq $t4, $zero, FIM         #Pule para FIM
+        addi $t0, 1                 #Se não incremente 1 em $t0
+        j FOR                       #Próxima Iteração
+    FIM:                            #Rótulo FIM
+
+    addi $v0, $s0, -1               #Decrementa um do registrador $s0 e armazena em $v0
+
+    lw $s0, 0($sp)                  #Volta a pilha para o estado inicial
+    addi $sp, $sp, 4                #Faz a soma do valor de $sp com o inteiro 4, e armazena em sp
+
+    jr $ra                          #Volta para onde o procedimento foi chamado

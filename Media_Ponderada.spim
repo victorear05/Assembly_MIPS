@@ -1,0 +1,59 @@
+#Neste exercicio, sua tarefa é ler N números reais com seus respectivos pesos, e calcular a média ponderada entre eles.
+
+#Entrada
+#A entrada é composta por diversas linhas. A primeira linha contém um inteiro N (1 < N ≤ 10) que determina quantos
+#números estarão envolvidos na média. As 2N linhas seguintes contém: a primeira um número real pi > 0 que determina
+#o peso da i-ésima parcela da média, e a segunda, um número real ri > 0 que representa o i-ésimo valor da média,
+#respectivamente.
+
+#Saída
+#Seu programa deve imprimir a média ponderada dos N números lidos. Sua solução deve possuir precisão de, no mínimo,
+#duas casas decimais. Atenção: isso não significa que você deve imprimir exatamente duas casas decimais, mas sim que a
+#diferença entre sua solução e a solução esperada não pode ser maior que 0,01.
+
+.data                                   #atribuicao de valor para as variaveis
+
+.text                                   #instrucoes do programa
+
+main:                                   #inicio para a execucao do programa
+    
+    li $v0, 5                           #chamada de sistema para que leia um inteiro
+    syscall                             #chamada
+
+    li $t0, 0
+    move $t2, $v0
+
+    mtc1 $zero, $f10
+    mtc1 $zero, $f14
+
+    FOR:
+        slt $t1, $t0, $t2
+        beq $t1, $zero, Fim
+    
+        
+        li $v0, 7
+        syscall
+        
+        add.d $f14, $f14, $f0
+        mov.d $f2, $f0
+
+        li $v0, 7
+        syscall        
+
+        mul.d $f6, $f0, $f2
+        add.d $f10, $f10, $f6
+        
+
+        addi $t0, $t0, 1
+        j FOR
+    Fim:
+
+    
+    div.d $f10, $f10, $f14
+    
+    mov.d $f12, $f10
+    li $v0, 3
+    syscall
+
+    li $v0, 10                          #chamada de saida do programa
+    syscall                             #chamada

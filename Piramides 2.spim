@@ -1,0 +1,69 @@
+#Pirâmides 2
+
+#Faça um programa que leia um número natural n e desenhe uma pirâmide de asteriscos (veja o exemplo de saída).
+
+#Entrada
+#A entrada é composta por uma única linha, contendo o número n ( 1 ≤ n ≤ 1000000 ).
+
+#Saída
+#A saída é composta pela pirâmide de asteriscos.
+
+.data                                   #campo de variáveis
+    asterisco: .asciiz "*"          
+    linha: .asciiz "\n"
+    espaco: .asciiz " "
+.text                                   #campo de código
+
+main:                                   #rótulo main
+
+    li $t0, 1                           #carrega o valor 1 para o registrador $t0 
+    li $t5, 1                           #carrega o valor 1 para o registrador $t5
+    
+    li $v0, 5                           #carrega o valor 5 para o registrador $v0   
+    syscall                             #chamada ao SO|$v0=5: ler um inteiro
+
+    move $t1, $v0                       #move o valor de $v0 para $t1 
+
+    WHILE:                              #rótulo WHILE
+        slt $t4, $t1, $t0               #se $t1 é menor que $t0, armazena 1 em $t4
+        beq $t4, 1, SWHILE              #se $t4 é igual a 1, pula para SAIDA
+        
+        li $t2, 1                       #carrega o valor 1 para $t2
+        add $t4, $t1, $t0               #faz $t1 + $t0, e armazena em $t4
+        sub $t3, $t4, $t5               #faz $t4 - 1, e armazena em $t3
+        
+        FOR:                            #rótulo FOR
+            slt $t4, $t3, $t2           #se $t3 é menor que $t2, armazena em $t4
+            beq $t4, $t5, SFOR          #se $t4 igual a 1, pula para SFOR
+            
+            sub $t4, $t1, $t0           #faz $t1 - $t0, e armazena em $t4
+            slt $t4, $t4, $t2           #se $t4 é menor que $t2, armazena 1 em $t4
+            beq $t4, $t5, A             #se $t4 é igual a 1, pula para A
+
+            li $v0, 4                   #carregar o valor 4 para o registrador $v0
+            la $a0, espaco              #carregar o conteúdo de asterisco para $a0
+            syscall                     #chamada ao SO|$v0=4: printar uma string
+            j F                         #pula para o rótulo F
+            
+            A:
+            li $v0, 4                   #carregar o valor 4 para o registrador $v0
+            la $a0, asterisco           #carregar o conteúdo de asterisco para $a0
+            syscall                     #chamada ao SO|$v0=4: printar uma string
+            
+            F:                          #rótulo F
+            addi $t2, 1                 #incrementa 1 em $t2
+            j FOR                       #pular para o rótulo FOR
+        
+        SFOR:                           #rótulo SFOR
+        
+        li $v0, 4                       #carregar o valor 4 para o registrador $v0
+        la $a0, linha                   #carregar o conteúdo de linha para $a0
+        syscall                         #chamada ao SO|$v0=4: printar uma string
+        
+        addi $t0, 1                     #incrementar 1 ao registradot $t0
+        j WHILE                         #pular para o rótulo WHILE
+    SWHILE:                             #rótulo SWHILE
+    
+    li $v0, 10                          #chamada de sistema para fim do programa
+    syscall                             #chamada
+    
