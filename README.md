@@ -1,2 +1,2 @@
 # Exercicios-Assembly
-Alguns artefatos gerados em Assembly MIPS
+Alguns artefatos gerados em linguagem Assembly MIPS
